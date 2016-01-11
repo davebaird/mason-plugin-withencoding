@@ -1,6 +1,7 @@
 package Mason::Plugin::WithEncoding;
 use Moose;
 use Poet qw($poet $conf);
+use Mason 2.13 (); 
 
 with 'Mason::Plugin';
 
@@ -103,7 +104,6 @@ EVAL
 
 package Mason::Plugin::WithEncoding::Request;
 use Mason::PluginRole;
-use Mason 2.13 (); 
 use Poet qw($conf);
 use Encode qw(encode decode);
 use Try::Tiny;
@@ -144,7 +144,7 @@ around 'send_json' => sub {
             $err->rethrow;
         }
         else {
-            die $err;                    # unexpected
+            die $err;                   # unexpected
         }
     };
 };
@@ -154,7 +154,7 @@ around 'send_json' => sub {
 package Mason::Plugin::WithEncoding::Compilation;
 use Mason::PluginRole;
 
-# None of this is required for the encoding/decoding cycle, but it's good stuff 
+# None of this is required for the encode/decode cycle, but it's good stuff 
 # to have for the encoding-aware developer.
 
 around 'output_class_header' => sub {
