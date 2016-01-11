@@ -44,21 +44,15 @@ set accordingly.
 If you are using Mason outside of a [Poet](https://metacpan.org/pod/Poet) environment, the plugin will only 
 encode the output. In a [Poet](https://metacpan.org/pod/Poet) environment, it also decodes the request.
 
+## Some background
+
     http://stackoverflow.com/questions/27806684/mason2-wrong-utf8-encoding-with-the-go-method
     http://stackoverflow.com/questions/5858596/how-to-make-mason2-utf-8-clean
     https://www.mail-archive.com/mason-users@lists.sourceforge.net/msg03450.html
 
-\# Also need to worry about FillInForm being utf8 safe - use HTML::FillInForm::ForceUTF8
+## TODO 
 
-So in short:
-If someone is able write an UTF8 \_\_PLUGIN\_\_ for Mason2, need to do 5 things:
-
-1.) add "use utf8;" into every obj. file (this should be done by
-        plugin regardless of the next)
-2.) allow adding additional pradmas into the obj source - this is done already!
-3.) encode everything what going from Mason ---to---> Plack
-4.) decode everything what coming from Pack --to--> Mason
-5.) Add UTF8 safe FillInForm into Filters (and check other filters)
+Check the FillInForm filter, maybe convert to use [HTML::FillInForm::ForceUTF8](https://metacpan.org/pod/HTML::FillInForm::ForceUTF8).
 
 # AUTHOR
 
@@ -135,11 +129,3 @@ YOUR LOCAL LAW. UNLESS REQUIRED BY LAW, NO COPYRIGHT HOLDER OR
 CONTRIBUTOR WILL BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, OR
 CONSEQUENTIAL DAMAGES ARISING IN ANY WAY OUT OF THE USE OF THE PACKAGE,
 EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-# POD ERRORS
-
-Hey! **The above document had some coding errors, which are explained below:**
-
-- Around line 155:
-
-    &#x3d;pod directives shouldn't be over one line long!  Ignoring all 2 lines of content

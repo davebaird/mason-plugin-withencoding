@@ -20,6 +20,13 @@ WriteMakefile(
     PREREQ_PM => {
         #'ABC'              => 1.6,
         #'Foo::Bar::Module' => 5.0401,
+        'Plack::Request::WithEncoding' => 0,
+        Mason => 2.13,
+        Poet => 0,
+        'Mason::Plugin' => 0,
+        Moose => 0,
+        Encode => 0,
+        'Try::Tiny' => 0,
     },
     dist  => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean => { FILES => 'Mason-Plugin-WithEncoding-*' },

@@ -37,8 +37,8 @@ perldoc command.
 
 You can also look for information at:
 
-    RT, CPAN's request tracker (report bugs here)
-        http://rt.cpan.org/NoAuth/Bugs.html?Dist=Mason-Plugin-WithEncoding
+    Github (report bugs here)
+        https://github.com/davebaird/mason-plugin-withencoding
 
     AnnoCPAN, Annotated CPAN documentation
         http://annocpan.org/dist/Mason-Plugin-WithEncoding

@@ -56,7 +56,28 @@ set accordingly.
 If you are using Mason outside of a L<Poet> environment, the plugin will only 
 encode the output. In a L<Poet> environment, it also decodes the request.
 
+=head2 Some background
+
+    http://stackoverflow.com/questions/27806684/mason2-wrong-utf8-encoding-with-the-go-method
+    http://stackoverflow.com/questions/5858596/how-to-make-mason2-utf-8-clean
+    https://www.mail-archive.com/mason-users@lists.sourceforge.net/msg03450.html
+
+=head2 TODO 
+
+Check the FillInForm filter, maybe convert to use L<HTML::FillInForm::ForceUTF8>.
+
 =cut
+
+#    So in short:
+#    If someone is able write an UTF8 __PLUGIN__ for Mason2, need to do 5 things:
+#    
+#    1.) add "use utf8;" into every obj. file (this should be done by
+#            plugin regardless of the next)
+#    2.) allow adding additional pradmas into the obj source - this is done already!
+#    3.) encode everything what going from Mason ---to---> Plack
+#    4.) decode everything what coming from Pack --to--> Mason
+#    5.) Add UTF8 safe FillInForm into Filters (and check other filters)
+ 
 
 # This sidesteps Poet::Plack::Request, but - at the moment (Jan 2016) - that's 
 # just an empty subclass of Plack::Request
@@ -149,47 +170,6 @@ around 'output_class_header' => sub {
 };
 
 1;
-
-__END__
-
-=pod
-Some background:
-
-    http://stackoverflow.com/questions/27806684/mason2-wrong-utf8-encoding-with-the-go-method
-    http://stackoverflow.com/questions/5858596/how-to-make-mason2-utf-8-clean
-    https://www.mail-archive.com/mason-users@lists.sourceforge.net/msg03450.html
-
-
-# Also need to worry about FillInForm being utf8 safe - use HTML::FillInForm::ForceUTF8
-
-So in short:
-If someone is able write an UTF8 __PLUGIN__ for Mason2, need to do 5 things:
-
-1.) add "use utf8;" into every obj. file (this should be done by
-        plugin regardless of the next)
-2.) allow adding additional pradmas into the obj source - this is done already!
-3.) encode everything what going from Mason ---to---> Plack
-4.) decode everything what coming from Pack --to--> Mason
-5.) Add UTF8 safe FillInForm into Filters (and check other filters)
-=cut
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 =head1 AUTHOR
