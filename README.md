@@ -72,9 +72,9 @@ You can find documentation for this module with the perldoc command.
 
 You can also look for information at:
 
-- RT: CPAN's request tracker (report bugs here)
+- Github (report bugs here)
 
-    [http://rt.cpan.org/NoAuth/Bugs.html?Dist=Mason-Plugin-WithEncoding](http://rt.cpan.org/NoAuth/Bugs.html?Dist=Mason-Plugin-WithEncoding)
+    [https://github.com/davebaird/mason-plugin-withencoding](https://github.com/davebaird/mason-plugin-withencoding)
 
 - AnnoCPAN: Annotated CPAN documentation
 

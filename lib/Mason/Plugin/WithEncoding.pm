@@ -196,9 +196,9 @@ You can also look for information at:
 
 =over 4
 
-=item * RT: CPAN's request tracker (report bugs here)
+=item * Github (report bugs here)
 
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Mason-Plugin-WithEncoding>
+L<https://github.com/davebaird/mason-plugin-withencoding>
 
 =item * AnnoCPAN: Annotated CPAN documentation
 
