@@ -42,8 +42,6 @@ zwölf boxkämpfer jagen viktor quer über den großen sylter deich.
 
 % }}
 
-♥♥♥
-
 QUERY STRING FROM REQ: <% \$m->req->query_string %>
 
 % use URI::Escape;
@@ -68,8 +66,6 @@ molestie feugiat, enim quam ultricies metus, quis dapibus sapien orci ut risus.
 
 % }}
 
-♥♥♥
-
 QUERY STRING FROM REQ: <% \$m->req->query_string %>
 
 % use URI::Escape;
@@ -77,9 +73,9 @@ QUERY STRING UNESCAPED: <% uri_unescape(\$m->req->query_string) %>
 
 ASCII
 
-    return $src_utf8 if $want eq 'utf8';
-    return $src_plain if $want eq 'plain';
-    return $src_utf8_dies if $want eq 'dies';
+    return $src_utf8        if $want eq 'utf8';
+    return $src_plain       if $want eq 'plain';
+    return $src_utf8_dies   if $want eq 'dies';
     die "No content for '$want'";
 }    
 

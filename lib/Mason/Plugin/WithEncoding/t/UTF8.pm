@@ -10,11 +10,6 @@ use Encode qw(encode decode);
 
 # Setup stolen from Poet::t::Run and Poet::t::PSGIHandler
 
-# Test::Builder prints messages without turning on encoding for the print 
-# filehandle, so we get warnings about wide characters for some of these tests. 
-# Not sure how to silence them, but encoding these strings here is NOT correct. 
-# Test::Harness (?) supplies the 'output' filehandle to Test::Builder so 
-# maybe the problem is there. 
 sub test_withencoding : Tests {
     my $self = shift;
     my $poet_conf = shift;
