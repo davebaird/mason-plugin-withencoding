@@ -28,15 +28,17 @@ my %module_build_args = (
     "Guard" => "0.1",
     "Mason" => "2.13",
     "Moose" => "0.34",
+    "Plack::Request::WithEncoding" => 0,
     "Poet" => "0.04",
     "Try::Tiny" => "0.01",
-    "perl" => "5.008009"
+    "encoding::warnings" => 0,
+    "perl" => "v5.12.0"
   },
   "test_requires" => {
     "Test::Class" => 0,
     "Test::Class::Most" => 0,
     "Test::More" => 0,
-    "perl" => "5.008009"
+    "perl" => "v5.12.0"
   }
 );
 
@@ -46,7 +48,7 @@ my %fallback_build_requires = (
   "Test::Class" => 0,
   "Test::Class::Most" => 0,
   "Test::More" => 0,
-  "perl" => "5.008009"
+  "perl" => "v5.12.0"
 );
 
 

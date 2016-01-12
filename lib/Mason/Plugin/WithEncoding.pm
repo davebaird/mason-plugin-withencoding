@@ -1,4 +1,6 @@
 package Mason::Plugin::WithEncoding;
+
+
 # ABSTRACT: Add encoding support to Poet/Mason apps
 
 use Moose;

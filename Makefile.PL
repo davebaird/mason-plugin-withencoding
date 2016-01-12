@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-use 5.008009;
+use 5.012000;
 
 use ExtUtils::MakeMaker;
 
@@ -17,7 +17,7 @@ my %WriteMakefileArgs = (
   },
   "DISTNAME" => "Mason-Plugin-WithEncoding",
   "LICENSE" => "perl",
-  "MIN_PERL_VERSION" => "5.008009",
+  "MIN_PERL_VERSION" => "5.012000",
   "NAME" => "Mason::Plugin::WithEncoding",
   "PREREQ_PM" => {
     "Capture::Tiny" => "0.01",
@@ -25,8 +25,10 @@ my %WriteMakefileArgs = (
     "Guard" => "0.1",
     "Mason" => "2.13",
     "Moose" => "0.34",
+    "Plack::Request::WithEncoding" => 0,
     "Poet" => "0.04",
-    "Try::Tiny" => "0.01"
+    "Try::Tiny" => "0.01",
+    "encoding::warnings" => 0
   },
   "TEST_REQUIRES" => {
     "Test::Class" => 0,
@@ -47,11 +49,13 @@ my %FallbackPrereqs = (
   "Mason" => "2.13",
   "Module::Build" => "0.28",
   "Moose" => "0.34",
+  "Plack::Request::WithEncoding" => 0,
   "Poet" => "0.04",
   "Test::Class" => 0,
   "Test::Class::Most" => 0,
   "Test::More" => 0,
-  "Try::Tiny" => "0.01"
+  "Try::Tiny" => "0.01",
+  "encoding::warnings" => 0
 );
 
 
