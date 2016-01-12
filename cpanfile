@@ -1,9 +1,9 @@
 requires "Capture::Tiny" => "0.01";
+requires "Encode" => "0";
 requires "Guard" => "0.1";
 requires "Mason" => "2.13";
 requires "Moose" => "0.34";
 requires "Poet" => "0.04";
-requires "Test::Class::Most" => "0.01";
 requires "Try::Tiny" => "0.01";
 requires "perl" => "5.008009";
 
@@ -13,6 +13,7 @@ on 'build' => sub {
 
 on 'test' => sub {
   requires "Test::Class" => "0";
+  requires "Test::Class::Most" => "0";
   requires "Test::More" => "0";
   requires "perl" => "5.008009";
 };

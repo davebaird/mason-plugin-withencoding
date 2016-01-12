@@ -24,16 +24,17 @@ my %module_build_args = (
   "recursive_test_files" => 1,
   "requires" => {
     "Capture::Tiny" => "0.01",
+    "Encode" => 0,
     "Guard" => "0.1",
     "Mason" => "2.13",
     "Moose" => "0.34",
     "Poet" => "0.04",
-    "Test::Class::Most" => "0.01",
     "Try::Tiny" => "0.01",
     "perl" => "5.008009"
   },
   "test_requires" => {
     "Test::Class" => 0,
+    "Test::Class::Most" => 0,
     "Test::More" => 0,
     "perl" => "5.008009"
   }
@@ -43,6 +44,7 @@ my %module_build_args = (
 my %fallback_build_requires = (
   "Module::Build" => "0.28",
   "Test::Class" => 0,
+  "Test::Class::Most" => 0,
   "Test::More" => 0,
   "perl" => "5.008009"
 );

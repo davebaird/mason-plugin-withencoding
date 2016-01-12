@@ -21,15 +21,16 @@ my %WriteMakefileArgs = (
   "NAME" => "Mason::Plugin::WithEncoding",
   "PREREQ_PM" => {
     "Capture::Tiny" => "0.01",
+    "Encode" => 0,
     "Guard" => "0.1",
     "Mason" => "2.13",
     "Moose" => "0.34",
     "Poet" => "0.04",
-    "Test::Class::Most" => "0.01",
     "Try::Tiny" => "0.01"
   },
   "TEST_REQUIRES" => {
     "Test::Class" => 0,
+    "Test::Class::Most" => 0,
     "Test::More" => 0
   },
   "VERSION" => "0.2",
@@ -41,13 +42,14 @@ my %WriteMakefileArgs = (
 
 my %FallbackPrereqs = (
   "Capture::Tiny" => "0.01",
+  "Encode" => 0,
   "Guard" => "0.1",
   "Mason" => "2.13",
   "Module::Build" => "0.28",
   "Moose" => "0.34",
   "Poet" => "0.04",
   "Test::Class" => 0,
-  "Test::Class::Most" => "0.01",
+  "Test::Class::Most" => 0,
   "Test::More" => 0,
   "Try::Tiny" => "0.01"
 );
