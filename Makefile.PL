@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-use 5.006;
+use 5.008009;
 
 use ExtUtils::MakeMaker;
 
@@ -13,31 +13,24 @@ my %WriteMakefileArgs = (
     "Module::Build" => "0.28"
   },
   "CONFIGURE_REQUIRES" => {
-    "ExtUtils::MakeMaker" => 0,
     "Module::Build" => "0.28"
   },
   "DISTNAME" => "Mason-Plugin-WithEncoding",
   "LICENSE" => "perl",
-  "MIN_PERL_VERSION" => "5.006",
+  "MIN_PERL_VERSION" => "5.008009",
   "NAME" => "Mason::Plugin::WithEncoding",
   "PREREQ_PM" => {
-    "Capture::Tiny" => 0,
-    "Encode" => 0,
-    "Guard" => 0,
+    "Capture::Tiny" => "0.01",
+    "Guard" => "0.1",
     "Mason" => "2.13",
-    "Mason::Plugin" => 0,
-    "Mason::PluginRole" => 0,
-    "Moose" => 0,
-    "Poet" => 0,
-    "Poet::Tools" => 0,
-    "Test::Class::Most" => 0,
-    "Try::Tiny" => 0,
-    "utf8" => 0
+    "Moose" => "0.34",
+    "Poet" => "0.04",
+    "Test::Class::Most" => "0.01",
+    "Try::Tiny" => "0.01"
   },
   "TEST_REQUIRES" => {
-    "Test::More" => 0,
-    "strict" => 0,
-    "warnings" => 0
+    "Test::Class" => 0,
+    "Test::More" => 0
   },
   "VERSION" => "0.2",
   "test" => {
@@ -47,22 +40,16 @@ my %WriteMakefileArgs = (
 
 
 my %FallbackPrereqs = (
-  "Capture::Tiny" => 0,
-  "Encode" => 0,
-  "Guard" => 0,
+  "Capture::Tiny" => "0.01",
+  "Guard" => "0.1",
   "Mason" => "2.13",
-  "Mason::Plugin" => 0,
-  "Mason::PluginRole" => 0,
   "Module::Build" => "0.28",
-  "Moose" => 0,
-  "Poet" => 0,
-  "Poet::Tools" => 0,
-  "Test::Class::Most" => 0,
+  "Moose" => "0.34",
+  "Poet" => "0.04",
+  "Test::Class" => 0,
+  "Test::Class::Most" => "0.01",
   "Test::More" => 0,
-  "Try::Tiny" => 0,
-  "strict" => 0,
-  "utf8" => 0,
-  "warnings" => 0
+  "Try::Tiny" => "0.01"
 );
 
 

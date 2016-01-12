@@ -1,29 +1,23 @@
-requires "Capture::Tiny" => "0";
-requires "Encode" => "0";
-requires "Guard" => "0";
+requires "Capture::Tiny" => "0.01";
+requires "Guard" => "0.1";
 requires "Mason" => "2.13";
-requires "Mason::Plugin" => "0";
-requires "Mason::PluginRole" => "0";
-requires "Moose" => "0";
-requires "Poet" => "0";
-requires "Poet::Tools" => "0";
-requires "Test::Class::Most" => "0";
-requires "Try::Tiny" => "0";
-requires "utf8" => "0";
+requires "Moose" => "0.34";
+requires "Poet" => "0.04";
+requires "Test::Class::Most" => "0.01";
+requires "Try::Tiny" => "0.01";
+requires "perl" => "5.008009";
 
 on 'build' => sub {
   requires "Module::Build" => "0.28";
 };
 
 on 'test' => sub {
+  requires "Test::Class" => "0";
   requires "Test::More" => "0";
-  requires "perl" => "5.006";
-  requires "strict" => "0";
-  requires "warnings" => "0";
+  requires "perl" => "5.008009";
 };
 
 on 'configure' => sub {
-  requires "ExtUtils::MakeMaker" => "0";
   requires "Module::Build" => "0.28";
 };
 

@@ -11,7 +11,6 @@ my %module_build_args = (
     "Module::Build" => "0.28"
   },
   "configure_requires" => {
-    "ExtUtils::MakeMaker" => 0,
     "Module::Build" => "0.28"
   },
   "dist_abstract" => "Add encoding support to Poet/Mason apps",
@@ -24,34 +23,28 @@ my %module_build_args = (
   "module_name" => "Mason::Plugin::WithEncoding",
   "recursive_test_files" => 1,
   "requires" => {
-    "Capture::Tiny" => 0,
-    "Encode" => 0,
-    "Guard" => 0,
+    "Capture::Tiny" => "0.01",
+    "Guard" => "0.1",
     "Mason" => "2.13",
-    "Mason::Plugin" => 0,
-    "Mason::PluginRole" => 0,
-    "Moose" => 0,
-    "Poet" => 0,
-    "Poet::Tools" => 0,
-    "Test::Class::Most" => 0,
-    "Try::Tiny" => 0,
-    "utf8" => 0
+    "Moose" => "0.34",
+    "Poet" => "0.04",
+    "Test::Class::Most" => "0.01",
+    "Try::Tiny" => "0.01",
+    "perl" => "5.008009"
   },
   "test_requires" => {
+    "Test::Class" => 0,
     "Test::More" => 0,
-    "perl" => "5.006",
-    "strict" => 0,
-    "warnings" => 0
+    "perl" => "5.008009"
   }
 );
 
 
 my %fallback_build_requires = (
   "Module::Build" => "0.28",
+  "Test::Class" => 0,
   "Test::More" => 0,
-  "perl" => "5.006",
-  "strict" => 0,
-  "warnings" => 0
+  "perl" => "5.008009"
 );
 
 
