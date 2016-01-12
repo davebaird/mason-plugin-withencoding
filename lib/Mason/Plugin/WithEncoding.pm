@@ -1,4 +1,5 @@
 package Mason::Plugin::WithEncoding;
+
 use Moose;
 use Poet qw($poet $conf);
 use Mason 2.13 (); 
@@ -8,14 +9,6 @@ with 'Mason::Plugin';
 =head1 NAME
 
 Mason::Plugin::WithEncoding - add encoding support to Poet/Mason apps
-
-=head1 VERSION
-
-Version 0.01
-
-=cut
-
-our $VERSION = '0.01';
 
 
 =head1 SYNOPSIS
@@ -103,6 +96,7 @@ EVAL
 1;
 
 package Mason::Plugin::WithEncoding::Request;
+
 use Mason::PluginRole;
 use Poet qw($conf);
 use Encode qw(encode decode);
@@ -152,6 +146,7 @@ around 'send_json' => sub {
 1;
 
 package Mason::Plugin::WithEncoding::Compilation;
+
 use Mason::PluginRole;
 
 # None of this is required for the encode/decode cycle, but it's good stuff 
