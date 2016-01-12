@@ -1,7 +1,3 @@
-# NAME
-
-Mason::Plugin::WithEncoding - add encoding support to Poet/Mason apps
-
 # SYNOPSIS
 
     In your Poet config file:
@@ -49,46 +45,3 @@ This plugin only works inside a [Poet](https://metacpan.org/pod/Poet) environmen
     http://stackoverflow.com/questions/27806684/mason2-wrong-utf8-encoding-with-the-go-method
     http://stackoverflow.com/questions/5858596/how-to-make-mason2-utf-8-clean
     https://www.mail-archive.com/mason-users@lists.sourceforge.net/msg03450.html
-
-## TODO 
-
-Check the FillInForm filter, maybe convert to use [HTML::FillInForm::ForceUTF8](https://metacpan.org/pod/HTML::FillInForm::ForceUTF8).
-
-# AUTHOR
-
-David R. Baird, `<dave at zerofive.co.uk >`
-
-# BUGS
-
-Please report any bugs or feature requests through the web interface at
-[https://github.com/davebaird/mason-plugin-withencoding](https://github.com/davebaird/mason-plugin-withencoding). I will be notified,
-and then you'll automatically be notified of progress on your bug as I make
-changes.
-
-# SUPPORT
-
-You can find documentation for this module with the perldoc command.
-
-    perldoc Mason::Plugin::WithEncoding
-
-You can also look for information at:
-
-- Github (report bugs here)
-
-    [https://github.com/davebaird/mason-plugin-withencoding](https://github.com/davebaird/mason-plugin-withencoding)
-
-- AnnoCPAN: Annotated CPAN documentation
-
-    [http://annocpan.org/dist/Mason-Plugin-WithEncoding](http://annocpan.org/dist/Mason-Plugin-WithEncoding)
-
-- CPAN Ratings
-
-    [http://cpanratings.perl.org/d/Mason-Plugin-WithEncoding](http://cpanratings.perl.org/d/Mason-Plugin-WithEncoding)
-
-- Search CPAN
-
-    [http://search.cpan.org/dist/Mason-Plugin-WithEncoding/](http://search.cpan.org/dist/Mason-Plugin-WithEncoding/)
-
-# LICENSE AND COPYRIGHT
-
-See the LICENSE file included with this distribution.
