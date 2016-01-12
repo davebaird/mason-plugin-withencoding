@@ -42,7 +42,7 @@ sub test_no_withencoding : Tests {
         $mech->content_unlike(qr/QUERY STRING FROM REQ: ♥♥=♥♥♥♥♥♥/); 
         $mech->content_like(qr[QUERY STRING FROM REQ: \Q%E2%99%A5%E2%99%A5=%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5\E]);
         $mech->content_unlike(qr/QUERY STRING UNESCAPED: ♥♥=♥♥♥♥♥♥♥/);
-        warn $mech->content;
+        #warn $mech->content;
         $mech->content_like(qr/A QUICK BROWN FOX JUMPS OVER THE LAZY DOG/);
         $mech->content_unlike(qr/a quick brown fox jumps over the lazy dog/);
         $mech->content_unlike(qr/ΔΙΑΦΥΛΆΞΤΕ ΓΕΝΙΚΆ ΤΗ ΖΩΉ ΣΑΣ ΑΠΌ ΒΑΘΕΙΆ ΨΥΧΙΚΆ ΤΡΑΎΜΑΤΑ/);   #### WithEncode matches       (uc operation works)
@@ -61,7 +61,7 @@ sub test_no_withencoding : Tests {
         $mech->content_unlike(qr/QUERY STRING FROM REQ: ♥♥=♥♥♥♥♥♥/); 
         $mech->content_like(qr[QUERY STRING FROM REQ: \Q%E2%99%A5%E2%99%A5=%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5\E]);
         $mech->content_unlike(qr/QUERY STRING UNESCAPED: ♥♥=♥♥♥♥♥♥♥/);
-        warn $mech->content;
+        #warn $mech->content;
         $mech->content_like(qr/A QUICK BROWN FOX JUMPS OVER THE LAZY DOG/);
         $mech->content_unlike(qr/a quick brown fox jumps over the lazy dog/);
         $mech->content_unlike(qr/ΔΙΑΦΥΛΆΞΤΕ ΓΕΝΙΚΆ ΤΗ ΖΩΉ ΣΑΣ ΑΠΌ ΒΑΘΕΙΆ ΨΥΧΙΚΆ ΤΡΑΎΜΑΤΑ/);    #### WithEncode matches       (uc operation works)
@@ -69,6 +69,7 @@ sub test_no_withencoding : Tests {
         
         # std config, utf8 content, ascii url, no query
         $mech->get_ok("http://127.0.0.1:9998/utf8");
+        #warn $mech->content;
         $mech->content_like(qr/A QUICK BROWN FOX JUMPS OVER THE LAZY DOG/);
         $mech->content_unlike(qr/a quick brown fox jumps over the lazy dog/);
         $mech->content_unlike(qr/ΔΙΑΦΥΛΆΞΤΕ ΓΕΝΙΚΆ ΤΗ ΖΩΉ ΣΑΣ ΑΠΌ ΒΑΘΕΙΆ ΨΥΧΙΚΆ ΤΡΑΎΜΑΤΑ/);    #### WithEncode matches       (uc operation works)
@@ -78,6 +79,7 @@ sub test_no_withencoding : Tests {
         $mech->get_ok("http://127.0.0.1:9998/plain");
         $mech->content_like(qr/LOREM IPSUM DOLOR SIT AMET/);
         $mech->content_unlike(qr/Lorem ipsum dolor sit amet/);
+        #warn $mech->content;
 
 
         # std config, chokes on $.args->{♥} in the page, looks like a bug

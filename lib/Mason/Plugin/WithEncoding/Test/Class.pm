@@ -1,6 +1,11 @@
 package Mason::Plugin::WithEncoding::Test::Class;
 
 use utf8;
+
+# http://www.effectiveperlprogramming.com/2011/07/fix-testbuilders-unicode-issue/
+binmode Test::More->builder->output(),         ':encoding(UTF-8)';
+binmode Test::More->builder->failure_output(), ':encoding(UTF-8)';
+
 use Test::Class::Most parent => 'Poet::Test::Class';
 use Poet::Tools qw(dirname mkpath trim write_file);
 
@@ -37,6 +42,8 @@ zwölf boxkämpfer jagen viktor quer über den großen sylter deich.
 
 % }}
 
+♥♥♥
+
 QUERY STRING FROM REQ: <% \$m->req->query_string %>
 
 % use URI::Escape;
@@ -61,10 +68,12 @@ molestie feugiat, enim quam ultricies metus, quis dapibus sapien orci ut risus.
 
 % }}
 
+♥♥♥
+
 QUERY STRING FROM REQ: <% \$m->req->query_string %>
 
 % use URI::Escape;
-QUERY STRING UNESCAPED: <% \$m->req->query_string %>
+QUERY STRING UNESCAPED: <% uri_unescape(\$m->req->query_string) %>
 
 ASCII
 

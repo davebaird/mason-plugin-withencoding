@@ -3,6 +3,7 @@ package Mason::Plugin::WithEncoding::t::UTF8;
 use utf8;
 
 use Test::Class::Most parent => 'Mason::Plugin::WithEncoding::Test::Class';
+use Test::Warnings qw(warnings);
 use Capture::Tiny qw();
 use Guard;
 use Poet::Tools qw(dirname mkpath trim write_file);
@@ -45,6 +46,14 @@ sub test_withencoding : Tests {
         # internal character representation) and being sent to the system for 
         # storage. Plack::Request::WithEncoding will decode it again when 
         # we ask for it via WWW::Mechanize and Mason.
+        
+        #
+        # Unescaping the query string doesn't produce love hearts, which I don't 
+        # really understand, since this does:
+        #
+        # $ perl -MURI::Escape -e 'print uri_unescape("%E2%99%A5%E2%99%A5=%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5")."\n"'
+        # $ ♥♥=♥♥♥♥♥♥♥
+        #
 
  
 
@@ -60,7 +69,7 @@ sub test_withencoding : Tests {
         $mech->content_unlike(qr/QUERY STRING FROM REQ: ♥♥=♥♥♥♥♥♥/); 
         $mech->content_like(qr[QUERY STRING FROM REQ: \Q%E2%99%A5%E2%99%A5=%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5\E]);
         $mech->content_unlike(qr/QUERY STRING UNESCAPED: ♥♥=♥♥♥♥♥♥♥/);
-        warn $mech->content;
+        #warn $mech->content;
         $mech->content_like(qr/A QUICK BROWN FOX JUMPS OVER THE LAZY DOG/);
         $mech->content_unlike(qr/a quick brown fox jumps over the lazy dog/);
         $mech->content_like(qr/ΔΙΑΦΥΛΆΞΤΕ ΓΕΝΙΚΆ ΤΗ ΖΩΉ ΣΑΣ ΑΠΌ ΒΑΘΕΙΆ ΨΥΧΙΚΆ ΤΡΑΎΜΑΤΑ/);
@@ -79,7 +88,7 @@ sub test_withencoding : Tests {
         $mech->content_unlike(qr/QUERY STRING FROM REQ: ♥♥=♥♥♥♥♥♥/); 
         $mech->content_like(qr[QUERY STRING FROM REQ: \Q%E2%99%A5%E2%99%A5=%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5\E]);
         $mech->content_unlike(qr/QUERY STRING UNESCAPED: ♥♥=♥♥♥♥♥♥♥/);
-        warn $mech->content;
+        #warn $mech->content;
         $mech->content_like(qr/A QUICK BROWN FOX JUMPS OVER THE LAZY DOG/);
         $mech->content_unlike(qr/a quick brown fox jumps over the lazy dog/);
         $mech->content_like(qr/ΔΙΑΦΥΛΆΞΤΕ ΓΕΝΙΚΆ ΤΗ ΖΩΉ ΣΑΣ ΑΠΌ ΒΑΘΕΙΆ ΨΥΧΙΚΆ ΤΡΑΎΜΑΤΑ/);
@@ -97,13 +106,10 @@ sub test_withencoding : Tests {
         $mech->content_like(qr/LOREM IPSUM DOLOR SIT AMET/);
         $mech->content_unlike(qr/Lorem ipsum dolor sit amet/);
 
-
-
         # utf8 config, chokes on $.args->{♥} in the page, looks like a bug
-        $mech->get("http://127.0.0.1:9999/dies"); # PSGI error: Unrecognized character
+        $mech->get("http://127.0.0.1:9999/dies");
         ok($mech->status == 500, 'UTF8 content bug');
-        #$mech->content_like(qr/♥♥♥♥♥♥♥/);
-
+        
         kill( 1, $pid );
         waitpid($pid, 0);
     }

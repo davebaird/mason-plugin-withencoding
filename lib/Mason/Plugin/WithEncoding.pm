@@ -85,7 +85,7 @@ BEGIN {
     
     eval <<EVAL;                          ## no critic (ProhibitStringyEval)
 package ${app_name}::Plack::Request;
-use parent 'Plack::Request::WithEncoding';
+use parent ('Plack::Request::WithEncoding', 'Poet::Plack::Request');
 
 sub new {
     my \$self = shift->SUPER::new(\@_);
