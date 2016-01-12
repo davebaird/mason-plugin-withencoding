@@ -3,7 +3,6 @@ package Mason::Plugin::WithEncoding::t::UTF8;
 use utf8;
 
 use Test::Class::Most parent => 'Mason::Plugin::WithEncoding::Test::Class';
-use Test::Warnings qw(warnings);
 use Capture::Tiny qw();
 use Guard;
 use Poet::Tools qw(dirname mkpath trim write_file);
