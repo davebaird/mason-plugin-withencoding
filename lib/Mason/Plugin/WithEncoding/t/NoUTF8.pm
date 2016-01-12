@@ -12,16 +12,16 @@ use Encode qw(encode decode);
 
 sub test_no_withencoding : Tests {
     my $self = shift;
-    
+
     my $conf_no_encoding = {
         'layer' => 'production',
         'server.port' => 9998,
-    };    
+    };
 
     my $poet = $self->temp_env(conf => $conf_no_encoding);
     my $root_dir = $poet->root_dir;
     my $run_log  = "$root_dir/logs/run.log";
-    
+
     if ( my $pid = fork() ) {
         # parent
         scope_guard { kill( 1, $pid ) };
@@ -35,11 +35,11 @@ sub test_no_withencoding : Tests {
         $self->add_comp(path => '/utf8.mc',  src => encode('UTF-8', $self->content_for_tests('utf8')), poet => $poet);
         $self->add_comp(path => '/plain.mc', src => encode('UTF-8', $self->content_for_tests('plain')), poet => $poet);
         $self->add_comp(path => '/dies.mc',  src => encode('UTF-8', $self->content_for_tests('dies')), poet => $poet);
-        
+
         # std config, utf8 content, utf8 url, utf8 query
         $mech->get_ok("http://127.0.0.1:9998/♥♥♥?♥♥=♥♥♥♥♥♥♥");
         # query string goes over wires as encoded ascii, so clients use url encoding to preserve information
-        $mech->content_unlike(qr/QUERY STRING FROM REQ: ♥♥=♥♥♥♥♥♥/); 
+        $mech->content_unlike(qr/QUERY STRING FROM REQ: ♥♥=♥♥♥♥♥♥/);
         $mech->content_like(qr[QUERY STRING FROM REQ: \Q%E2%99%A5%E2%99%A5=%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5\E]);
         $mech->content_unlike(qr/QUERY STRING UNESCAPED: ♥♥=♥♥♥♥♥♥♥/);
         #warn $mech->content;
@@ -54,11 +54,11 @@ sub test_no_withencoding : Tests {
         $mech->content_unlike(qr/a quick brown fox jumps over the lazy dog/);
         $mech->content_unlike(qr/ΔΙΑΦΥΛΆΞΤΕ ΓΕΝΙΚΆ ΤΗ ΖΩΉ ΣΑΣ ΑΠΌ ΒΑΘΕΙΆ ΨΥΧΙΚΆ ΤΡΑΎΜΑΤΑ/);    #### WithEncode matches       (uc operation works)
         $mech->content_like(qr/διαφυλάξτε γενικά τη ζωή σας από βαθειά ψυχικά τραύματα/);      #### WithEncode doesn't match (uc operation works)
-        
+
         # std config, utf8 content, ascii url, utf8 query
         $mech->get_ok("http://127.0.0.1:9998/utf8?♥♥=♥♥♥♥♥♥♥");
         # query string goes over wires as encoded ascii, so clients use url encoding to preserve information
-        $mech->content_unlike(qr/QUERY STRING FROM REQ: ♥♥=♥♥♥♥♥♥/); 
+        $mech->content_unlike(qr/QUERY STRING FROM REQ: ♥♥=♥♥♥♥♥♥/);
         $mech->content_like(qr[QUERY STRING FROM REQ: \Q%E2%99%A5%E2%99%A5=%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5\E]);
         $mech->content_unlike(qr/QUERY STRING UNESCAPED: ♥♥=♥♥♥♥♥♥♥/);
         #warn $mech->content;
@@ -66,7 +66,7 @@ sub test_no_withencoding : Tests {
         $mech->content_unlike(qr/a quick brown fox jumps over the lazy dog/);
         $mech->content_unlike(qr/ΔΙΑΦΥΛΆΞΤΕ ΓΕΝΙΚΆ ΤΗ ΖΩΉ ΣΑΣ ΑΠΌ ΒΑΘΕΙΆ ΨΥΧΙΚΆ ΤΡΑΎΜΑΤΑ/);    #### WithEncode matches       (uc operation works)
         $mech->content_like(qr/διαφυλάξτε γενικά τη ζωή σας από βαθειά ψυχικά τραύματα/);      #### WithEncode doesn't match (uc operation works)
-        
+
         # std config, utf8 content, ascii url, no query
         $mech->get_ok("http://127.0.0.1:9998/utf8");
         #warn $mech->content;
@@ -74,7 +74,7 @@ sub test_no_withencoding : Tests {
         $mech->content_unlike(qr/a quick brown fox jumps over the lazy dog/);
         $mech->content_unlike(qr/ΔΙΑΦΥΛΆΞΤΕ ΓΕΝΙΚΆ ΤΗ ΖΩΉ ΣΑΣ ΑΠΌ ΒΑΘΕΙΆ ΨΥΧΙΚΆ ΤΡΑΎΜΑΤΑ/);    #### WithEncode matches       (uc operation works)
         $mech->content_like(qr/διαφυλάξτε γενικά τη ζωή σας από βαθειά ψυχικά τραύματα/);      #### WithEncode doesn't match (uc operation works)
-        
+
         # std config, plain content, plain url, no query
         $mech->get_ok("http://127.0.0.1:9998/plain");
         $mech->content_like(qr/LOREM IPSUM DOLOR SIT AMET/);
@@ -86,7 +86,7 @@ sub test_no_withencoding : Tests {
         $mech->get("http://127.0.0.1:9998/dies"); # PSGI error: Unrecognized character
         ok($mech->status == 500, 'UTF8 content bug');
         #$mech->content_like(qr/♥♥♥♥♥♥♥/);
-        
+
         kill( 1, $pid );
         waitpid($pid, 0);
     }

@@ -13,7 +13,7 @@ use Encode qw(encode decode);
 sub test_withencoding : Tests {
     my $self = shift;
     my $poet_conf = shift;
-    
+
     my $conf_utf8 = {
         'layer'       => 'production',
         'server.port' => 9999,
@@ -28,39 +28,39 @@ sub test_withencoding : Tests {
     my $poet = $self->temp_env(conf => $conf_utf8);
     my $root_dir = $poet->root_dir;
     my $run_log  = "$root_dir/logs/run.log";
-    
+
     if ( my $pid = fork() ) {
         # parent
         scope_guard { kill( 1, $pid ) };
         sleep(2);
 
         my $mech = $self->mech($poet);
-        
-        # Encode the content because it is leaving Perl (which uses its own 
-        # internal character representation) and being sent to the system for 
-        # storage. Plack::Request::WithEncoding will decode it again when 
+
+        # Encode the content because it is leaving Perl (which uses its own
+        # internal character representation) and being sent to the system for
+        # storage. Plack::Request::WithEncoding will decode it again when
         # we ask for it via WWW::Mechanize and Mason.
-        
+
         #
-        # Unescaping the query string doesn't produce love hearts, which I don't 
+        # Unescaping the query string doesn't produce love hearts, which I don't
         # really understand, since this does:
         #
         # $ perl -MURI::Escape -e 'print uri_unescape("%E2%99%A5%E2%99%A5=%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5")."\n"'
         # $ ♥♥=♥♥♥♥♥♥♥
         #
 
- 
+
 
         # Don't encode the path because, hmm, not sure. Because it 'just works' as-is.
         $self->add_comp(path => '/♥♥♥.mc',   src => encode('UTF-8', $self->content_for_tests('utf8')), poet => $poet);
         $self->add_comp(path => '/utf8.mc',  src => encode('UTF-8', $self->content_for_tests('utf8')), poet => $poet);
         $self->add_comp(path => '/plain.mc', src => encode('UTF-8', $self->content_for_tests('plain')), poet => $poet);
         $self->add_comp(path => '/dies.mc',  src => encode('UTF-8', $self->content_for_tests('dies')), poet => $poet);
-        
+
         # utf8 config, utf8 content, utf8 url, utf8 query
         $mech->get_ok("http://127.0.0.1:9999/♥♥♥?♥♥=♥♥♥♥♥♥♥");
         # query string goes over wires as encoded ascii, so clients use url encoding to preserve information
-        $mech->content_unlike(qr/QUERY STRING FROM REQ: ♥♥=♥♥♥♥♥♥/); 
+        $mech->content_unlike(qr/QUERY STRING FROM REQ: ♥♥=♥♥♥♥♥♥/);
         $mech->content_like(qr[QUERY STRING FROM REQ: \Q%E2%99%A5%E2%99%A5=%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5\E]);
         $mech->content_unlike(qr/QUERY STRING UNESCAPED: ♥♥=♥♥♥♥♥♥♥/);
         #warn $mech->content;
@@ -75,11 +75,11 @@ sub test_withencoding : Tests {
         $mech->content_unlike(qr/a quick brown fox jumps over the lazy dog/);
         $mech->content_like(qr/ΔΙΑΦΥΛΆΞΤΕ ΓΕΝΙΚΆ ΤΗ ΖΩΉ ΣΑΣ ΑΠΌ ΒΑΘΕΙΆ ΨΥΧΙΚΆ ΤΡΑΎΜΑΤΑ/);
         $mech->content_unlike(qr/διαφυλάξτε γενικά τη ζωή σας από βαθειά ψυχικά τραύματα/);
-        
+
         # utf8 config, utf8 content, ascii url, utf8 query
         $mech->get_ok("http://127.0.0.1:9999/utf8?♥♥=♥♥♥♥♥♥♥");
         # query string goes over wires as encoded ascii, so clients use url encoding to preserve information
-        $mech->content_unlike(qr/QUERY STRING FROM REQ: ♥♥=♥♥♥♥♥♥/); 
+        $mech->content_unlike(qr/QUERY STRING FROM REQ: ♥♥=♥♥♥♥♥♥/);
         $mech->content_like(qr[QUERY STRING FROM REQ: \Q%E2%99%A5%E2%99%A5=%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5\E]);
         $mech->content_unlike(qr/QUERY STRING UNESCAPED: ♥♥=♥♥♥♥♥♥♥/);
         #warn $mech->content;
@@ -87,14 +87,14 @@ sub test_withencoding : Tests {
         $mech->content_unlike(qr/a quick brown fox jumps over the lazy dog/);
         $mech->content_like(qr/ΔΙΑΦΥΛΆΞΤΕ ΓΕΝΙΚΆ ΤΗ ΖΩΉ ΣΑΣ ΑΠΌ ΒΑΘΕΙΆ ΨΥΧΙΚΆ ΤΡΑΎΜΑΤΑ/);
         $mech->content_unlike(qr/διαφυλάξτε γενικά τη ζωή σας από βαθειά ψυχικά τραύματα/);
-        
+
         # utf8 config, utf8 content, ascii url, no query
         $mech->get_ok("http://127.0.0.1:9999/utf8");
         $mech->content_like(qr/A QUICK BROWN FOX JUMPS OVER THE LAZY DOG/);
         $mech->content_unlike(qr/a quick brown fox jumps over the lazy dog/);
         $mech->content_like(qr/ΔΙΑΦΥΛΆΞΤΕ ΓΕΝΙΚΆ ΤΗ ΖΩΉ ΣΑΣ ΑΠΌ ΒΑΘΕΙΆ ΨΥΧΙΚΆ ΤΡΑΎΜΑΤΑ/);
         $mech->content_unlike(qr/διαφυλάξτε γενικά τη ζωή σας από βαθειά ψυχικά τραύματα/);
-        
+
         # utf8 config, plain content, plain url, no query
         $mech->get_ok("http://127.0.0.1:9999/plain");
         $mech->content_like(qr/LOREM IPSUM DOLOR SIT AMET/);
@@ -103,7 +103,7 @@ sub test_withencoding : Tests {
         # utf8 config, chokes on $.args->{♥} in the page, looks like a bug
         $mech->get("http://127.0.0.1:9999/dies");
         ok($mech->status == 500, 'UTF8 content bug');
-        
+
         kill( 1, $pid );
         waitpid($pid, 0);
     }

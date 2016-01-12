@@ -22,13 +22,13 @@ sub add_comp {
     my $path = $params{path} or die "must pass path";
     my $src  = $params{src}  or die "must pass src";
     my $file = $params{poet}->comps_dir . $path;
-    mkpath( dirname($file), 0, '0775' );  
+    mkpath( dirname($file), 0, '0775' );
     write_file( $file, $src );
 }
 
 sub content_for_tests {
     my ($self, $want) = @_;
-    
+
     my $src_utf8 = <<UTF8;
 % sub { uc(\$_[0]) } {{
 a quick brown fox jumps over the lazy dog.
@@ -77,6 +77,6 @@ ASCII
     return $src_plain       if $want eq 'plain';
     return $src_utf8_dies   if $want eq 'dies';
     die "No content for '$want'";
-}    
+}
 
 1;
