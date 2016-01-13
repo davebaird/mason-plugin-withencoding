@@ -61,22 +61,25 @@ around 'run' => sub {
 
     my $result = $self->$orig(@_); # this call loads content into the Plack::Response object
 
-    my $content = $self->res->content;
-    my $bytes = encode($enc, $content);
-    $self->res->content($bytes);
+    if ($self->res->content_type ne "application/json") { # already UTF8 encoded
+        my $content = $self->res->content;
+        my $bytes = encode($enc, $content);
+        $self->res->content($bytes);
+    }
 
     return $result; # will be discarded
 };
 
 # we just need to update the content-type header
 around 'send_json' => sub {
-    my $self = shift;
     my $orig = shift;
+    my $self = shift;
     my $data = shift;
 
     my $enc = $conf->get( 'server.encoding.response' => undef );
 
     try {
+        # calls JSON::XS::encode_json($data), which encodes as UTF8
         $self->$orig($data);            # aborts
     }
     catch {
@@ -97,8 +100,10 @@ package Mason::Plugin::WithEncoding::Compilation;
 
 use Mason::PluginRole;
 
-# None of this is required for the encode/decode cycle, but it's good stuff
-# to have for the encoding-aware developer.
+# None of this is strictly required for the encode/decode cycle, but it's good stuff
+# to have for the encoding-aware developer. Such as, for example, in the tests.
+# Since the component source used in testing is stored as UTF8 encoded bytes,
+# we need the 'use utf8' to be able to read them properly.
 
 around 'output_class_header' => sub {
     my $orig = shift;
@@ -156,9 +161,14 @@ data.
 Output sent through C<send_json> is also encoded and the content-type header
 set accordingly.
 
-=head2 Caveat
+=head2 Caveats
 
 This plugin only works inside a L<Poet> environment.
+
+The C<send_json> method added to the L<Mason> request object by L<Poet> always
+encodes its output as UTF8, which is pretty much always the correct thing to do.
+But if you are using some other encoding, you'll need to patch this plugin to get
+C<send_json> to use that instead of UTF8.
 
 =head2 Some background
 

@@ -1,4 +1,3 @@
-requires "Capture::Tiny" => "0.01";
 requires "Encode" => "0";
 requires "Guard" => "0.1";
 requires "Mason" => "2.13";
@@ -10,19 +9,11 @@ requires "URI::Escape" => "3.29";
 requires "encoding::warnings" => "0";
 requires "perl" => "v5.12.0";
 
-on 'build' => sub {
-  requires "Module::Build" => "0.28";
-};
-
 on 'test' => sub {
   requires "Test::Class" => "0";
   requires "Test::Class::Most" => "0";
   requires "Test::More" => "0";
   requires "perl" => "v5.12.0";
-};
-
-on 'configure' => sub {
-  requires "Module::Build" => "0.28";
 };
 
 on 'develop' => sub {

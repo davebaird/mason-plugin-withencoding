@@ -44,9 +44,14 @@ data.
 Output sent through `send_json` is also encoded and the content-type header
 set accordingly.
 
-## Caveat
+## Caveats
 
 This plugin only works inside a [Poet](https://metacpan.org/pod/Poet) environment.
+
+The `send_json` method added to the [Mason](https://metacpan.org/pod/Mason) request object by [Poet](https://metacpan.org/pod/Poet) always
+encodes its output as UTF8, which is pretty much always the correct thing to do.
+But if you are using some other encoding, you'll need to patch this plugin to get
+`send_json` to use that instead of UTF8.
 
 ## Some background
 

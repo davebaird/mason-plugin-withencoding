@@ -9,6 +9,7 @@ binmode Test::More->builder->failure_output(), ':encoding(UTF-8)';
 use Test::Class::Most parent => 'Poet::Test::Class';
 use Poet::Tools qw(dirname mkpath trim write_file);
 use URI::Escape;
+use Encode qw(encode decode);
 
 sub mech {
     my $self = shift;
@@ -25,6 +26,23 @@ sub add_comp {
     my $file = $params{poet}->comps_dir . $path;
     mkpath( dirname($file), 0, '0775' );
     write_file( $file, $src );
+}
+
+# Encode the content because it is leaving Perl (which uses its own
+# internal character representation) and being sent to the system for
+# storage. When Mason reads the component source back again, the 'use utf8;'
+# added to comp headers will decode the source back into internal Perly format.
+# Then the WithEncoding plugin will encode content sent back out, as utf8 (in this
+# case, but in general as whatever is configured).
+sub add_comps {
+    my $self = shift;
+    my $poet = shift;
+    # Don't encode the path because, hmm, not sure. Because it 'just works' as-is.
+    $self->add_comp(path => '/♥♥♥.mc',   src => encode('UTF-8', $self->content_for_tests('utf8')),  poet => $poet);
+    $self->add_comp(path => '/utf8.mc',  src => encode('UTF-8', $self->content_for_tests('utf8')),  poet => $poet);
+    $self->add_comp(path => '/plain.mc', src => encode('UTF-8', $self->content_for_tests('plain')), poet => $poet);
+    $self->add_comp(path => '/dies.mc',  src => encode('UTF-8', $self->content_for_tests('dies')),  poet => $poet);
+    $self->add_comp(path => '/json.mc',  src => encode('UTF-8', $self->content_for_tests('json')),  poet => $poet);
 }
 
 sub content_for_tests {
@@ -74,9 +92,24 @@ QUERY STRING UNESCAPED: <% uri_unescape(\$m->req->query_string) %>
 
 ASCII
 
+    my $src_json = <<SRC;
+<\%init>
+    my \$data_for_json = {
+        foo => 'bar',
+        baz => [qw(barp beep)],
+        9 => { one => 1, ex => 'EKS' },
+        heart => '♥',
+    };
+</\%init>
+% \$m->send_json(\$data_for_json);
+SRC
+
+
+
     return $src_utf8        if $want eq 'utf8';
     return $src_plain       if $want eq 'plain';
     return $src_utf8_dies   if $want eq 'dies';
+    return $src_json        if $want eq 'json';
     die "No content for '$want'";
 }
 

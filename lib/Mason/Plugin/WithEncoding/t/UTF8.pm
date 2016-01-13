@@ -5,7 +5,6 @@ use utf8;
 use Test::Class::Most parent => 'Mason::Plugin::WithEncoding::Test::Class';
 use Guard;
 use Poet::Tools qw(dirname mkpath trim write_file);
-use Encode qw(encode decode);
 
 # Setup stolen from Poet::t::Run and Poet::t::PSGIHandler
 
@@ -34,11 +33,7 @@ sub test_withencoding : Tests {
         sleep(2);
 
         my $mech = $self->mech($poet);
-
-        # Encode the content because it is leaving Perl (which uses its own
-        # internal character representation) and being sent to the system for
-        # storage. Plack::Request::WithEncoding will decode it again when
-        # we ask for it via WWW::Mechanize and Mason.
+        $self->add_comps($poet);
 
         #
         # Unescaping the query string doesn't produce love hearts, which I don't
@@ -47,14 +42,6 @@ sub test_withencoding : Tests {
         # $ perl -MURI::Escape -e 'print uri_unescape("%E2%99%A5%E2%99%A5=%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5%E2%99%A5")."\n"'
         # $ ♥♥=♥♥♥♥♥♥♥
         #
-
-
-
-        # Don't encode the path because, hmm, not sure. Because it 'just works' as-is.
-        $self->add_comp(path => '/♥♥♥.mc',   src => encode('UTF-8', $self->content_for_tests('utf8')), poet => $poet);
-        $self->add_comp(path => '/utf8.mc',  src => encode('UTF-8', $self->content_for_tests('utf8')), poet => $poet);
-        $self->add_comp(path => '/plain.mc', src => encode('UTF-8', $self->content_for_tests('plain')), poet => $poet);
-        $self->add_comp(path => '/dies.mc',  src => encode('UTF-8', $self->content_for_tests('dies')), poet => $poet);
 
         # utf8 config, utf8 content, utf8 url, utf8 query
         $mech->get_ok("http://127.0.0.1:9999/♥♥♥?♥♥=♥♥♥♥♥♥♥");
@@ -114,6 +101,37 @@ sub test_withencoding : Tests {
         ok($mech->status == 500, 'UTF8 content bug');
         is($mech->content_type, '', 'Got correct content type');
         is($mech->response->content_type_charset, undef, 'Got correct content-type charset');
+
+        # utf8 config, json content
+        $mech->get_ok("http://127.0.0.1:9999/json");
+        #warn $mech->content;
+        my $expected_from_json = {
+            foo => 'bar',
+            baz => [qw(barp beep)],
+            9 => { one => 1, ex => 'EKS' },
+            heart => '♥',
+        };
+
+        cmp_deeply(JSON->new->utf8->decode($mech->content), $expected_from_json, 'Decoded and de-JSONified expected data from JSON');
+
+        #   this doesn't work
+        #my $expected_mangled_from_json = {%$expected_from_json, heart => 'â�¥'};  # â�¥
+        #   I can't figure out how to get this test to work. The cmp_deeply fails if fed
+        #   the unmangled hashref as expected, I
+        #   just can't figure out how to mangle the expected hashref to match the mangled hashref
+        #   retrieved from the $mech content
+        #cmp_deeply(JSON->new->decode($mech->content), $expected_mangled_from_json, 'Mangled data from JSON');        # fails 'â�¥'
+
+        my $from_decoded_utf8 = JSON->new->utf8->decode($mech->content); # should work
+        my $not_decoded = JSON->new->decode($mech->content);             # should break
+
+        ok($from_decoded_utf8->{heart}, 'My heart is true');
+        is($from_decoded_utf8->{heart}, '♥', 'Found my true ♥');
+        ok($not_decoded->{heart}, 'My heart is true');
+        ok($not_decoded->{heart} ne '♥', 'My heart has been mangled');
+
+        is($mech->content_type, 'application/json', 'Got correct content type');
+        is($mech->response->content_type_charset, 'UTF-8', 'Got correct content-type charset');
     }
     else {
         # child
