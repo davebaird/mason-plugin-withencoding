@@ -8,6 +8,7 @@ binmode Test::More->builder->failure_output(), ':encoding(UTF-8)';
 
 use Test::Class::Most parent => 'Poet::Test::Class';
 use Poet::Tools qw(dirname mkpath trim write_file);
+use URI::Escape;
 
 sub mech {
     my $self = shift;

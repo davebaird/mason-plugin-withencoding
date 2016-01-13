@@ -6,6 +6,7 @@ requires "Moose" => "0.34";
 requires "Plack::Request::WithEncoding" => "0";
 requires "Poet" => "0.04";
 requires "Try::Tiny" => "0.01";
+requires "URI::Escape" => "3.29";
 requires "encoding::warnings" => "0";
 requires "perl" => "v5.12.0";
 

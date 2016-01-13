@@ -31,6 +31,7 @@ my %module_build_args = (
     "Plack::Request::WithEncoding" => 0,
     "Poet" => "0.04",
     "Try::Tiny" => "0.01",
+    "URI::Escape" => "3.29",
     "encoding::warnings" => 0,
     "perl" => "v5.12.0"
   },

@@ -3,7 +3,6 @@ package Mason::Plugin::WithEncoding::t::UTF8;
 use utf8;
 
 use Test::Class::Most parent => 'Mason::Plugin::WithEncoding::Test::Class';
-use Capture::Tiny qw();
 use Guard;
 use Poet::Tools qw(dirname mkpath trim write_file);
 use Encode qw(encode decode);
@@ -68,6 +67,8 @@ sub test_withencoding : Tests {
         $mech->content_unlike(qr/a quick brown fox jumps over the lazy dog/);
         $mech->content_like(qr/ΔΙΑΦΥΛΆΞΤΕ ΓΕΝΙΚΆ ΤΗ ΖΩΉ ΣΑΣ ΑΠΌ ΒΑΘΕΙΆ ΨΥΧΙΚΆ ΤΡΑΎΜΑΤΑ/);
         $mech->content_unlike(qr/διαφυλάξτε γενικά τη ζωή σας από βαθειά ψυχικά τραύματα/);
+        is($mech->content_type, 'text/html', 'Got correct content type');
+        is($mech->response->content_type_charset, 'UTF-8', 'Got correct content-type charset');
 
         # utf8 config, utf8 content, utf8 url, no query
         $mech->get_ok("http://127.0.0.1:9999/♥♥♥");
@@ -75,6 +76,8 @@ sub test_withencoding : Tests {
         $mech->content_unlike(qr/a quick brown fox jumps over the lazy dog/);
         $mech->content_like(qr/ΔΙΑΦΥΛΆΞΤΕ ΓΕΝΙΚΆ ΤΗ ΖΩΉ ΣΑΣ ΑΠΌ ΒΑΘΕΙΆ ΨΥΧΙΚΆ ΤΡΑΎΜΑΤΑ/);
         $mech->content_unlike(qr/διαφυλάξτε γενικά τη ζωή σας από βαθειά ψυχικά τραύματα/);
+        is($mech->content_type, 'text/html', 'Got correct content type');
+        is($mech->response->content_type_charset, 'UTF-8', 'Got correct content-type charset');
 
         # utf8 config, utf8 content, ascii url, utf8 query
         $mech->get_ok("http://127.0.0.1:9999/utf8?♥♥=♥♥♥♥♥♥♥");
@@ -87,6 +90,8 @@ sub test_withencoding : Tests {
         $mech->content_unlike(qr/a quick brown fox jumps over the lazy dog/);
         $mech->content_like(qr/ΔΙΑΦΥΛΆΞΤΕ ΓΕΝΙΚΆ ΤΗ ΖΩΉ ΣΑΣ ΑΠΌ ΒΑΘΕΙΆ ΨΥΧΙΚΆ ΤΡΑΎΜΑΤΑ/);
         $mech->content_unlike(qr/διαφυλάξτε γενικά τη ζωή σας από βαθειά ψυχικά τραύματα/);
+        is($mech->content_type, 'text/html', 'Got correct content type');
+        is($mech->response->content_type_charset, 'UTF-8', 'Got correct content-type charset');
 
         # utf8 config, utf8 content, ascii url, no query
         $mech->get_ok("http://127.0.0.1:9999/utf8");
@@ -94,18 +99,21 @@ sub test_withencoding : Tests {
         $mech->content_unlike(qr/a quick brown fox jumps over the lazy dog/);
         $mech->content_like(qr/ΔΙΑΦΥΛΆΞΤΕ ΓΕΝΙΚΆ ΤΗ ΖΩΉ ΣΑΣ ΑΠΌ ΒΑΘΕΙΆ ΨΥΧΙΚΆ ΤΡΑΎΜΑΤΑ/);
         $mech->content_unlike(qr/διαφυλάξτε γενικά τη ζωή σας από βαθειά ψυχικά τραύματα/);
+        is($mech->content_type, 'text/html', 'Got correct content type');
+        is($mech->response->content_type_charset, 'UTF-8', 'Got correct content-type charset');
 
         # utf8 config, plain content, plain url, no query
         $mech->get_ok("http://127.0.0.1:9999/plain");
         $mech->content_like(qr/LOREM IPSUM DOLOR SIT AMET/);
         $mech->content_unlike(qr/Lorem ipsum dolor sit amet/);
+        is($mech->content_type, 'text/html', 'Got correct content type');
+        is($mech->response->content_type_charset, 'UTF-8', 'Got correct content-type charset');
 
         # utf8 config, chokes on $.args->{♥} in the page, looks like a bug
         $mech->get("http://127.0.0.1:9999/dies");
         ok($mech->status == 500, 'UTF8 content bug');
-
-        kill( 1, $pid );
-        waitpid($pid, 0);
+        is($mech->content_type, '', 'Got correct content type');
+        is($mech->response->content_type_charset, undef, 'Got correct content-type charset');
     }
     else {
         # child
