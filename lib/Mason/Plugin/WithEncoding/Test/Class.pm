@@ -24,7 +24,7 @@ sub add_comp {
     my $path = $params{path} or die "must pass path";
     my $src  = $params{src}  or die "must pass src";
     my $file = $params{poet}->comps_dir . $path;
-    mkpath( dirname($file), 0, '0775' );
+    mkpath( dirname($file), 0, 0775 );  ## no critic (ValuesAndExpressions::ProhibitLeadingZeros)
     write_file( $file, $src );
 }
 
