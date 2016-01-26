@@ -69,7 +69,7 @@ around 'run' => sub {
     my $result = $self->$orig(@_); # this call loads content into the Plack::Response object
 
     if ($self->res->content_type ne "application/json") {           # already UTF8 encoded
-        if (my $use_enc = $self->res->content_type_charset) {
+        if (my $use_enc = $self->res->headers->content_type_charset) {
             if (! $self->emit_bytes) {
                 my $content = $self->res->content;
                 my $bytes = encode($use_enc, $content);
